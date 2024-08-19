@@ -10,12 +10,9 @@ api.interceptors.response.use((response) => {
   console.log(response)
   return response
 }, (error) => {
-  console.log('error', error)
   if (error.response && error.response.data) {
-
     return Promise.reject(new AppError(error.response.data.message))
   } else {
-    console.log(error)
     return Promise.reject(error)
   }
 })

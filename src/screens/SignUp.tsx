@@ -61,7 +61,6 @@ export function SignUp() {
           />
         )
       })
-
     }
   }
 
