@@ -46,7 +46,6 @@ const profileSchema = yup.object({
 
 export function Profile() {
   const [isUpdating, setIsUpdating] = useState(false);
-  const [photoIsLoading, setPhotoIsLoading] = useState(false);
 
   const toast = useToast()
   const { user, updateUserProfile } = useAuth()
