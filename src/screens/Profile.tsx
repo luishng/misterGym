@@ -9,14 +9,16 @@ import * as ImagePicker from 'expo-image-picker'
 import * as FileSystem from 'expo-file-system';
 
 import { useAuth } from '@hooks/useAuth';
+import { api } from '@services/api';
+import { AppError } from '@utils/AppError';
 
 import { ScreenHeader } from "@components/ScreenHeader";
 import { UserPhoto } from '@components/UserPhoto';
 import { Input } from '@components/Input';
 import { Button } from '@components/Button';
 import { ToastMessage } from '@components/ToastMessage';
-import { api } from '@services/api';
-import { AppError } from '@utils/AppError';
+
+import userPhotoDefault from '@assets/userPhotoDefault.png'
 
 type FormDataProps = {
   name: string
@@ -45,7 +47,6 @@ const profileSchema = yup.object({
 export function Profile() {
   const [isUpdating, setIsUpdating] = useState(false);
   const [photoIsLoading, setPhotoIsLoading] = useState(false);
-  const [userLocalPhoto, setUserLocalPhoto] = useState('https://github.com/luishng.png');
 
   const toast = useToast()
   const { user, updateUserProfile } = useAuth()
@@ -89,7 +90,39 @@ export function Profile() {
           })
         }
 
-        setUserLocalPhoto(photoURI)
+        const fileExtension = photoURI.split('.').pop()
+
+        const photoFile = {
+          name: `${user.name}.${fileExtension}`,
+          uri: photoURI,
+          type: `image/${fileExtension}`
+        } as any;
+
+        const userPhotoUploadForm = new FormData()
+        userPhotoUploadForm.append('avatar', photoFile)
+
+        const avatarUpdatedResponse = await api.patch('/users/avatar', userPhotoUploadForm, {
+          headers: {
+            'Content-Type': 'multipart/form-data'
+          }
+        })
+
+        const userUpdated = user;
+        userUpdated.avatar = avatarUpdatedResponse.data.avatar
+
+        updateUserProfile(userUpdated)
+
+        toast.show({
+          placement: "top",
+          render: ({ id }) => (
+            <ToastMessage
+              id={id}
+              action='success'
+              title="Foto atualizada com sucesso!"
+              onClose={() => toast.close(id)}
+            />
+          )
+        })
       }
     } catch (error) {
       console.log(error)
@@ -144,7 +177,11 @@ export function Profile() {
 
       <ScrollView contentContainerStyle={{ paddingBottom: 36 }}>
         <Center mt="$6" px="$10">
-          <UserPhoto source={{ uri: userLocalPhoto }} alt="foto do usuário" size='xl' />
+          <UserPhoto source={
+            user.avatar ?
+              { uri: `${api.defaults.baseURL}/avatar/${user.avatar}` } :
+              userPhotoDefault
+          } alt="foto do usuário" size='xl' />
           <TouchableOpacity onPress={handleUserPhotoSelect}>
             <Text color="$green500" fontSize="$md" fontFamily="$heading" mt="$2" mb="$8">Alterar foto</Text>
           </TouchableOpacity>
