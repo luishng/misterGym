@@ -11,7 +11,7 @@ export function Input({ isReadOnly = false, errorMessage = null, isInvalid = fal
   const invalid = isInvalid || !!errorMessage
 
   return (
-    <FormControl isInvalid={invalid} w="$full" mb="$4">
+    <FormControl isInvalid={invalid} w="$full">
       <GlueStackInput
         isInvalid={invalid}
         h="$14"
