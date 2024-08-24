@@ -47,7 +47,7 @@
 
 ## 🏋🏽💪🏼 About the project
 
-This project was developed on the Ignite by [Rocketseat](https://rocketseat.com.br/) &nbsp;🚀
+This project was developed in Specialization from [Rocketseat](https://rocketseat.com.br/) &nbsp;🚀
 
 This software a mobile hybrid application, provide a way for the people control your gym exercises.
 
