@@ -1,4 +1,4 @@
-import { VStack, Image, Center, Text, Heading, ScrollView, useToast } from "@gluestack-ui/themed";
+import { VStack, Image, Center, Text, Heading, ScrollView, useToast, HStack } from "@gluestack-ui/themed";
 
 import { useNavigation } from "@react-navigation/native";
 
@@ -87,7 +87,10 @@ export function SignUp() {
         />
         <VStack flex={1} px="$10" pb="$16">
           <Center my="$24" flex={1}>
-            <Logo />
+            <HStack>
+              <Logo width={40} height={40}/>
+              <Text color="$white" fontSize="$3xl" ml="$2">Mister Gym</Text>
+            </HStack>
 
             <Text color="$gray100" fontSize="$sm">Treine a sua mente e seu corpo.</Text>
           </Center>
